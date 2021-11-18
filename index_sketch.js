@@ -1,5 +1,9 @@
-function setup(){
-    if('geolocation' in navigator) {
+// to connect with nedb
+const Datastore = require('nedb');
+const database = new Datastore('database.db');
+
+function setup() {
+    if ('geolocation' in navigator) {
         /* geolocation is available */
         console.log('geolocation available');
         navigator.geolocation.getCurrentPosition(async position => {
@@ -13,7 +17,7 @@ function setup(){
         /* geolocation IS NOT available */
         console.log('geolocation NOT available');
     };
-    
+
     let lat, lon;
     // P5JS: get video from computer's webcam
     noCanvas();
@@ -28,16 +32,21 @@ function setup(){
         video.loadPixels();
         const image64 = video.canvas.toDataURL();
         // send Json data to server
-        const data = {lat, lon, mood, image64};
-        const options = {
-            method: "POST",
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data) // json stringified text
-        };
-        const response = await fetch('/api', options);
-        const json = await response.json();
+        const data = { lat, lon, mood, image64 };
+        // const options = {
+        //     method: "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(data) // json stringified text
+        // };
+        database.loadDatabase();
+        const timestamp = Date.now();
+        data.timestamp = timestamp;
+        // NeDB query: server inserts the client request with data variable into database
+        database.insert(data);
+        // const response = await fetch('/api', options);
+        // const json = await response.json();
         console.log(json);
         alert('Submit Success!'); // a pop up window to show user records submitted!
     });
