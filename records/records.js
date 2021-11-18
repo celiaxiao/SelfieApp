@@ -1,5 +1,5 @@
 // use fetch to get
-const Datastore = require('nedb');
+import Datastore from 'nedb';
 const database = new Datastore('database.db');
 async function getData() {
     // const response = await fetch('/api');
