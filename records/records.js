@@ -39,14 +39,21 @@ getData();
 
 const button = document.getElementById('clear');
 button.addEventListener('click', async event => {
-    const options = {
-        method: "DELETE",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-    const response = await fetch('/api/clear', options);
-    const json = await response.json();
-    console.log(json);
+    database.loadDatabase();
+    database.remove({}, { multi: true }, function (err, numRemoved) {
+        database.loadDatabase(function (err) {
+            // allow database to reload: done! 
+        });
+        // response.json({status: "success"});
+    });
+    // const options = {
+    //     method: "DELETE",
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // };
+    // const response = await fetch('/api/clear', options);
+    // const json = await response.json();
+    // console.log(json);
     location.reload(); //once all deleted, refresh page automatically
 });
