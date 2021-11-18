@@ -1,5 +1,5 @@
 // to connect with nedb
-import Datastore from 'nedb';
+const Datastore = require('nedb');
 const database = new Datastore('database.db');
 
 function setup() {
